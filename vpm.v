@@ -1,7 +1,7 @@
 module main
 const (
     pkg_name = 'vpm.json'
-    version = '0.0.2'
+    version = '0.0.3'
     vroot = get_v_root_path()
 )
 
