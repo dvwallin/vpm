@@ -23,12 +23,14 @@ fn get_v_root_path()string{
 
 // 获取包管理文件存储路径
 fn get_store_path()string{
-    return os.getwd()+'/'+PKG_NAME
+    return os.getwd()+'/$pkg_name'
 }
 
 // 删除包管理文件
 fn rm_store_path(){
-    os.rm(get_store_path())
+    os.rm(get_store_path()) or {
+		panic(err)
+	}
 }
 
 // 检测包管理文件是否存在
@@ -38,13 +40,13 @@ fn check_store_exist()bool{
 
 // 获取项目默认名称(当前所在目录名称)
 fn get_default_project_name()string{
-    return os.filename(os.getwd())
+    return os.file_name(os.getwd())
 }
 
 // 获取vlib路径
 fn get_vlib_path()string{
-    // return '$VROOT/vlib'
-    return '$VROOT/.vmodules'
+    // return '$vroot/vlib'
+    return '$vroot/.vmodules'
 }
 
 // 检测vlib是否存在
@@ -59,7 +61,7 @@ fn generate_store_tempate(store Store)string{
 
 // 从git url 上获取 lib 名称
 fn get_lib_name(git_url string)string{
-    mut name:=os.filename(git_url)
+    mut name:=os.file_name(git_url)
     if name.ends_with('.git'){
         name=name.replace('.git','')
     }
@@ -75,9 +77,11 @@ fn write_to_json(content string){
     path:=get_store_path()
     mut file:=os.create(path) or {
         println('create file "$path" failed!')
-        return 
+        return
     }
-    file.write(content)
+    file.write_string(content) or {
+		panic(err)
+	}
     file.close()
 }
 
@@ -85,10 +89,10 @@ fn write_to_json(content string){
 fn save_pkginfo_to_store(pkg_info PkgInfo){
     mut store:=load_to_store() or {
         load_store_failed()
-        return 
+        return
     }
     if check_pkg_exist_in_store(store.packages,pkg_info){
-        return 
+        return
     }
     store.packages << pkg_info
     content:=generate_store_tempate(store)
@@ -121,7 +125,7 @@ fn load_to_store()?Store{
 }
 
 // 通过git下载包
-fn fetch_pkg_from_git(lib_name,git_url string)PkgInfo{
+fn fetch_pkg_from_git(lib_name string,git_url string)PkgInfo{
     pkg_info:=PkgInfo{name:lib_name,repo:git_url}
     lib_path:=get_vlib_path()+'/$lib_name'
     //检测lib_path 是否已经存在
@@ -131,10 +135,7 @@ fn fetch_pkg_from_git(lib_name,git_url string)PkgInfo{
     }
     // clone lib
     println('fetching "$lib_name" from "$git_url" ...')
-    git_res:=os.exec('git clone $git_url $lib_path') or {
-        println('fetch failed')
-        return PkgInfo{name:'',repo:''}
-    }
+    git_res:=os.execute('git clone $git_url $lib_path')
     println(git_res)
     return pkg_info
 }

@@ -4,13 +4,13 @@ fn introduction(){
     println('If you have any questions, please send an email to 1814888800@qq.com')
 }
 fn store_exist_warning(){
-    println('$PKG_NAME already exist!')
+    println('$pkg_name already exist!')
 }
 fn store_init_warning(){
-    println('$PKG_NAME create failed!')
+    println('$pkg_name create failed!')
 }
 fn store_init_success(){
-    println('$PKG_NAME init success')
+    println('$pkg_name init success')
 }
 
 fn fetch_done(lib_name string){
@@ -26,5 +26,5 @@ fn install_complete(){
 }
 
 fn load_store_failed(){
-    println('load $PKG_NAME failed!')
+    println('load $pkg_name failed!')
 }

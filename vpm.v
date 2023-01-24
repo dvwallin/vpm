@@ -1,8 +1,8 @@
 module main
 const (
-    PKG_NAME = 'vpm.json'
-    VERSION = '0.0.2'
-    VROOT = get_v_root_path()
+    pkg_name = 'vpm.json'
+    version = '0.0.2'
+    vroot = get_v_root_path()
 )
 
 struct PkgInfo {
@@ -19,7 +19,7 @@ mut:
 fn exec(args []string){
     if args.len==1{
         introduction()
-        return 
+        return
     }
     cmd:=get_cmd(args)
     match cmd {
@@ -37,7 +37,7 @@ fn exec(args []string){
         }
         '-h' {
             cmd_help()
-        }    
+        }
         '-v' {
             cmd_version()
         }
@@ -60,13 +60,13 @@ fn exec(args []string){
 }
 
 fn main() {
-    if VROOT==''{
-        println('Env "VROOT" not set yet. You need set VROOT first.')
-        return 
+    if vroot==''{
+        println('Env "vroot" not set yet. You need set vroot first.')
+        return
     }
     if !check_vlib_exist(){
-        println('vlib not found! Please check if "VROOT" is set correctly.')
-        return 
+        println('vlib not found! Please check if "vroot" is set correctly.')
+        return
     }
     exec(get_args())
 }

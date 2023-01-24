@@ -5,9 +5,11 @@ module main
 
 // []string 去重
 fn string_array_distinct(arr []string)[]string{
-    mut res:=[]string
+    mut res:=[]string{}
     for v in arr{
-        if !v in res{
+        if v in res{
+			continue
+		} else {
             res<<v
         }
     }
